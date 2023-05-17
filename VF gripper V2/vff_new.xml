@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<SimscapeMultibodyImportXML version="2.0" xmlns="urn:mathworks:SimscapeMultibody:import" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Created by="" on="05/15/23||14:59:12" using="Simscape Multibody Link Version 7.4" from="SolidWorks 30.3.1"/>
+<ModelUnits mass="kilogram" length="millimeter"/>
+<DataUnits mass="kilogram" length="meter"/>
+<RootAssembly name="VFF 2022" uid="VFF 2022" version="220">
+<AssemblyFile name="VFF 2022.SLDASM" type="SolidWorks Assembly"/>
+<InstanceTree>
+<Instance name="Insert_Finger_2020_V2-1" uid="Insert_Finger_2020_V2-1" entityUid="Insert_Finger_2020_V2*:*Default">
+<Transform>
+<Rotation>1 0 0 0 1 0 0 0 1</Rotation>
+<Translation>0.019607688842831421 0.14947998534290041 0.096320466293511972</Translation>
+</Transform>
+</Instance>
+<Instance name="XL-320.stp-1" uid="XL-320.stp-1" entityUid="XL-320.stp*:*Default">
+<Transform>
+<Rotation>0 0 1 0 1 0 -1 0 0</Rotation>
+<Translation>0.016607688842831408 0.089979985342900387 0.075956426067465263</Translation>
+</Transform>
+</Instance>
+<Instance name="VF_Finger_2022_Ad_V1-1" uid="VF_Finger_2022_Ad_V1-1" grounded="true" entityUid="VF_Finger_2022_Ad_V1*:*v2">
+<Transform>
+<Rotation>1 0 0 0 1 0 0 0 1</Rotation>
+<Translation>0.020232688842831408 0.024179985342900376 0.096166220139929162</Translation>
+</Transform>
+</Instance>
+<Instance name="pad_interface_V2-1" uid="pad_interface_V2-1" entityUid="pad_interface_V2*:*Default">
+<Transform>
+<Rotation>0 0 1 1 -2.4781763942525811e-16 0 2.4781763942525811e-16 1 0</Rotation>
+<Translation>0.031607688842831411 0.092979985342900417 0.10516622013992916</Translation>
+</Transform>
+</Instance>
+<Instance name="fr12_h101-1" uid="fr12_h101-1" entityUid="fr12_h101*:*Default">
+<Transform>
+<Rotation>1 0 0 0 1 0 0 0 1</Rotation>
+<Translation>0.031513347152167054 0.0054799853429003745 0.090461235920522576</Translation>
+</Transform>
+</Instance>
+<Instance name="Finger_Cam_V0-1" uid="Finger_Cam_V0-1" entityUid="Finger_Cam_V0*:*v2">
+<Transform>
+<Rotation>0 -1 2.787356497559194e-16 1 0 -6.0507154842071031e-15 6.0507154842071031e-15 2.78735649755919e-16 1</Rotation>
+<Translation>0.038607688842831417 0.089979985342900387 0.075956426067465277</Translation>
+</Transform>
+</Instance>
+</InstanceTree>
+<Constraints>
+<Coincident name="Coincident1">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>0.022749999999999999 0 0.0089999999999999941</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>pad_interface_V2-1</Uid>
+</InstancePath>
+<Position>0 0 0</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Coincident name="Coincident2">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>0 0.12530000000000002 0</Position>
+<Axis>0 1 2.4781763942525811e-16</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>pad_interface_V2-1</Uid>
+</InstancePath>
+<Position>0.056499999999999995 0 0.027401754250991388</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Coincident name="Coincident3">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>-0.0046250000000000006 0.014299999999999993 0.0089999999999999941</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>pad_interface_V2-1</Uid>
+</InstancePath>
+<Position>0 0 -0.016000000000000007</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Coincident name="Coincident4">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>pad_interface_V2-1</Uid>
+</InstancePath>
+<Position>0 0 0</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>Insert_Finger_2020_V2-1</Uid>
+</InstancePath>
+<Position>0.01199999999999999 0 0</Position>
+<Axis>-1 -1.208265107645537e-16 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Parallel name="Coincident5">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>0.027375000000000003 0.12530000000000002 0.0020000000000000018</Position>
+<Axis>-1.0842021724855044e-16 1.2084541404918074e-16 -1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>Insert_Finger_2020_V2-1</Uid>
+</InstancePath>
+<Position>0 0 0</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+</Parallel>
+<Coincident name="Coincident6">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>pad_interface_V2-1</Uid>
+</InstancePath>
+<Position>0.056499999999999995 0 0.027401754250991388</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>Insert_Finger_2020_V2-1</Uid>
+</InstancePath>
+<Position>0 0 -0.0025000000000000022</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Coincident name="Coincident8">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>-0.0011250000000000149 0.044299999999999992 -0.0097097940724638898</Position>
+<Axis>0 0 -1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>XL-320.stp-1</Uid>
+</InstancePath>
+<Position>-0.010499999999999995 -0.023150337590460007 0.012</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Concentric name="Concentric1">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>-0.012626000000000002 0.041800000000000018 -0.014209794072463894</Position>
+<Axis>1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>XL-320.stp-1</Uid>
+</InstancePath>
+<Position>-0.0060000000000000053 -0.023999999999999994 0.012</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+</Concentric>
+<Coincident name="Coincident9">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>-0.012625000000000003 0.038300000000000001 -0.03053266972799619</Position>
+<Axis>-1 0 0</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>XL-320.stp-1</Uid>
+</InstancePath>
+<Position>0 0 -0.0089999999999999993</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Coincident name="Coincident10">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>VF_Finger_2022_Ad_V1-1</Uid>
+</InstancePath>
+<Position>0 0.0092999999999999958 0</Position>
+<Axis>0 -1 -1.2084541404918074e-16</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>fr12_h101-1</Uid>
+</InstancePath>
+<Position>-0.019 0.028000000000000004 0.009999999999999995</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Coincident name="重合8">
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>XL-320.stp-1</Uid>
+</InstancePath>
+<Position>0 0 0.015000000000000003</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="plane">
+<InstancePath>
+<Uid>Finger_Cam_V0-1</Uid>
+</InstancePath>
+<Position>0 0.0069999999999999993 0</Position>
+<Axis>0 1 0</Axis>
+</ConstraintGeometry>
+</Coincident>
+<Concentric name="同心3">
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>XL-320.stp-1</Uid>
+</InstancePath>
+<Position>0 0 0.015000000000000003</Position>
+<Axis>0 0 1</Axis>
+</ConstraintGeometry>
+<ConstraintGeometry geomType="cylinder">
+<InstancePath>
+<Uid>Finger_Cam_V0-1</Uid>
+</InstancePath>
+<Position>0 0.0069999999999999993 0</Position>
+<Axis>0 -1 0</Axis>
+</ConstraintGeometry>
+</Concentric>
+</Constraints>
+</RootAssembly>
+<Assemblies>
+</Assemblies>
+<Parts>
+<Part name="Finger_Cam_V0" uid="Finger_Cam_V0*:*v2" version="265">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="Finger_Cam_V0.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.0023425345021160556</Mass>
+<CenterOfMass>-0.0025477171568937494 0.0033204048871723715 -2.2138004729433347e-05</CenterOfMass>
+<Inertia>7.0571463025767856e-08 1.7274994136912852e-07 1.2628556845992888e-07 -5.5201562944555303e-11 4.1969908805572519e-10 -1.0869123753622325e-08</Inertia>
+</MassProperties>
+<GeometryFile name="Finger_Cam_V0_v2_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.8666666666666667" g="0.67843137254901964" b="1" a="1"/>
+<Diffuse r="0.8666666666666667" g="0.67843137254901964" b="1" a="1"/>
+<Specular r="0.43333333333333335" g="0.33921568627450982" b="0.5" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.40000000596046448</Shininess>
+</VisualProperties>
+</Part>
+<Part name="Insert_Finger_2020_V2" uid="Insert_Finger_2020_V2*:*Default" version="771">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="Insert_Finger_2020_V2.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.027303747836492587</Mass>
+<CenterOfMass>0.011999949295408431 -0.051365334876090893 0.0056234244884435809</CenterOfMass>
+<Inertia>2.6941311332282872e-05 2.1543508781180137e-06 2.7279082006607211e-05 -1.4063970731031448e-07 -1.0714331372634192e-11 -1.2409468016928381e-11</Inertia>
+</MassProperties>
+<GeometryFile name="Insert_Finger_2020_V2_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.99215686274509807" g="1" b="0.41960784313725491" a="1"/>
+<Diffuse r="0.99215686274509807" g="1" b="0.41960784313725491" a="1"/>
+<Specular r="0.49607843137254903" g="0.5" b="0.20980392156862746" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.40000000596046448</Shininess>
+</VisualProperties>
+</Part>
+<Part name="VF_Finger_2022_Ad_V1" uid="VF_Finger_2022_Ad_V1*:*v2" version="3525">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="VF_Finger_2022_Ad_V1.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.027679233101477716</Mass>
+<CenterOfMass>0.0097679326970063849 0.058366491511823389 -0.0029978680322407065</CenterOfMass>
+<Inertia>3.6670374612462598e-05 6.8718429569724408e-06 3.712924476047544e-05 -1.3068129176843701e-06 -6.0271463888274451e-07 -1.119429027541216e-07</Inertia>
+</MassProperties>
+<GeometryFile name="VF_Finger_2022_Ad_V1_v2_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.70588235294117641" g="1" b="0.67843137254901964" a="1"/>
+<Diffuse r="0.70588235294117641" g="1" b="0.67843137254901964" a="1"/>
+<Specular r="0.21176471429712629" g="0.30000001192092896" b="0.20352941985223807" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.5</Shininess>
+</VisualProperties>
+</Part>
+<Part name="XL-320.stp" uid="XL-320.stp*:*Default" version="119">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="XL-320.stp.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.016254811431487097</Mass>
+<CenterOfMass>-3.0044990078413698e-10 -0.0068371957692825204 0.00049766267560224511</CenterOfMass>
+<Inertia>2.1819130309202923e-06 1.4507184243691065e-06 1.9198041525696699e-06 -6.0480560431124195e-08 4.6973711924011807e-14 8.3420381791221304e-14</Inertia>
+</MassProperties>
+<GeometryFile name="XL-320.stp_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Diffuse r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Specular r="0.396078431372549" g="0.40980392156862744" b="0.46666666666666667" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.3125</Shininess>
+</VisualProperties>
+</Part>
+<Part name="fr12_h101" uid="fr12_h101*:*Default" version="118">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="fr12_h101.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.0029447732126393323</Mass>
+<CenterOfMass>0 0.020254133636563379 0</CenterOfMass>
+<Inertia>3.8935268499648961e-07 9.1116484678596178e-07 9.8265727609869581e-07 0 0 0</Inertia>
+</MassProperties>
+<GeometryFile name="fr12_h101_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Diffuse r="0.792156862745098" g="0.81960784313725488" b="0.93333333333333335" a="1"/>
+<Specular r="0.396078431372549" g="0.40980392156862744" b="0.46666666666666667" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.3125</Shininess>
+</VisualProperties>
+</Part>
+<Part name="pad_interface_V2" uid="pad_interface_V2*:*Default" version="328">
+<ModelUnits mass="kilogram" length="millimeter"/>
+<PartFile name="pad_interface_V2.SLDPRT" type="SolidWorks Part"/>
+<MassProperties>
+<Mass>0.0081093902527989356</Mass>
+<CenterOfMass>0.0017034290589061001 0.0007610025344359163 1.7342647248340668e-07</CenterOfMass>
+<Inertia>1.0645624906952121e-06 1.2700825888502963e-05 1.1722162599045968e-05 3.6858109063071085e-13 7.7241429619535661e-11 2.3513190627036817e-07</Inertia>
+</MassProperties>
+<GeometryFile name="pad_interface_V2_Default_sldprt.STEP" type="STEP"/>
+<VisualProperties>
+<Ambient r="0.56862745098039214" g="0.74901960784313726" b="1" a="1"/>
+<Diffuse r="0.56862745098039214" g="0.74901960784313726" b="1" a="1"/>
+<Specular r="0.28431372549019607" g="0.37450980392156863" b="0.5" a="1"/>
+<Emissive r="0" g="0" b="0" a="1"/>
+<Shininess>0.40000000596046448</Shininess>
+</VisualProperties>
+</Part>
+</Parts>
+</SimscapeMultibodyImportXML>
