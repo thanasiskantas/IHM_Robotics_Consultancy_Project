@@ -9,11 +9,15 @@ motor_size = [0.02 0.02 0.04];
 platform_size = [0.5 0.5 0.001];
 cube_size = [0.02 0.02 0.1];
 stander_size = [0.02 0.02 0.05+(motor_size(3)/2)];
+pad_interface_thick = 0.003;
+friction_pad_thick = 0.002;
+friction_pad_size = [0.119 friction_pad_thick 0.032]; 
 
 
 % translation
 % gripper
 Gripper_offset = [0 0.02 0.05];
+
 
 % environment
 platform_offset = [0 0.2 0.0005];
