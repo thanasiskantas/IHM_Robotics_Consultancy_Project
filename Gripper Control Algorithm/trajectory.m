@@ -18,16 +18,16 @@ clc
 %% User INPUT
 
 % start pose
-start_pose = [0, 4];
+start_pose = [0, 2];
 
 % goal pose, assume x = 0 all the time
-goal_angle = 180; 
+goal_angle = 0; 
 if goal_angle > 180 && goal_angle <= 360
     goal_angle = goal_angle - 360; % rotate anticlockwise
 elseif goal_angle > 360
     disp("Invalid angle input. Enter an angle that's within [-180, 360]")
 end
-goal_pose = [0, 7, deg2rad(goal_angle-45)];
+goal_pose = [4, 7, deg2rad(goal_angle-45)]; % 先往左的3slide适合在左侧的goal pos
 % positive is clockwise
 % [0,90] -> [-45,45]负值由右往左转得到, 正值由左往右转得到
 % [0,-90] -> 由左往右 [270, 360]会按anticlockwise rotate来
@@ -60,6 +60,7 @@ alpha2_LIMIT = deg2rad([20 160]);
 
 
 %% Plot start and end point
+figure
 scatter(start_pose(1), start_pose(2), 100, 'filled');
 hold on;
 scatter(goal_pose(1), goal_pose(2), 100, 'filled');
@@ -85,7 +86,8 @@ if rotate_90 >= 1 && rotate_small > 0
         disp("SSSRSSSR, Clockwise Rotation")
 
         % rotate 90 degree
-        goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)];
+        goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)]; % find the optimum location
+
         [alpha1_rotate_1, alpha2_rotate_1, centre1,motor_angle_1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_1, d, W, L, base_left, base_right);
         get_alpha_for_slide(centre1, start_pose, base_left, base_right, base_d, FL)
         scatter(goal_pose_1(1), goal_pose_1(2), 100, 'filled');
@@ -143,7 +145,7 @@ else
         plotStartPos(start_pose, L, W, base_left, base_right);
         disp("SSSRSSSR, Clockwise Rotation")
 
-        goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)];
+        goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)]; % find the optimum location
         [alpha1_rotate_1, alpha2_rotate_1, centre1,motor_angle_1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_1, d, W, L, base_left, base_right);
         get_alpha_for_slide(centre1, start_pose, base_left, base_right, base_d, FL)
         scatter(goal_pose_1(1), goal_pose_1(2), 100, 'filled');
@@ -596,11 +598,22 @@ function [alpha1_rotate, alpha2_rotate, centre1] = get_L2R_Rotate_StartPos(squar
 
 end
 
+
+
+
+
+
+
+
 %% Slide
 function [] = get_alpha_for_slide(goal_pose, start_pose, base_left, base_right, base_d, FL)
-    r_start = sqrt((start_pose(1)-base_left(1))^2 + start_pose(2)^2);
-    r_goal_from_right = sqrt((goal_pose(1)-base_right(1))^2 + goal_pose(2)^2);
+    
+    r_start_from_left = sqrt((start_pose(1)-base_left(1))^2 + start_pose(2)^2);
+    r_start_from_right = sqrt((start_pose(1)-base_right(1))^2 + start_pose(2)^2);
+
     r_goal_from_left = sqrt((goal_pose(1)-base_left(1))^2 + goal_pose(2)^2);
+    r_goal_from_right = sqrt((goal_pose(1)-base_right(1))^2 + goal_pose(2)^2);
+
 
     if r_goal_from_right > FL || r_goal_from_left > FL
         disp(r_goal_from_right)
@@ -610,72 +623,224 @@ function [] = get_alpha_for_slide(goal_pose, start_pose, base_left, base_right, 
     elseif goal_pose(1:2) == start_pose()
         disp("no movement")
     
-    elseif r_goal_from_left == r_start 
+
+
+
+% one slide ------------------
+
+    elseif r_goal_from_left == r_start_from_left
         disp("One Slide")
-        disp("Control Mode: T,P")
+        disp("Control Mode: P,T")
         disp("High Friction Sequence: L")
     
         alpha1_start = findalpha1(start_pose,base_left);
         alpha1_end = findalpha1(goal_pose,base_left);
     
-        plotArch (r_start,base_left,pi-alpha1_start,pi-alpha1_end);
+        plotArch (r_start_from_left,base_left,pi-alpha1_start,pi-alpha1_end);
+        hold on;
+
+    elseif r_goal_from_right == r_start_from_right
+        disp("One Slide")
+        disp("Control Mode: T,P")
+        disp("High Friction Sequence: R")
+    
+        alpha2_start = findalpha2(start_pose,base_right);
+        alpha2_end = findalpha2(goal_pose,base_right);
+    
+        plotArch (r_start_from_right,base_right,alpha2_end,alpha2_start);
         hold on;
     
-    elseif r_goal_from_right < (base_d + r_start)
+    
+
+% two slide ------------------
+
+    elseif r_goal_from_right < (base_d + r_start_from_left) || r_goal_from_left < (base_d + r_start_from_right)
         disp("Two Slides")
         disp("Control Mode: T,P")
         disp("High Friction Sequence: L, R")
+
+% can only to Left then Right
+        if r_goal_from_right < (base_d + r_start_from_left) && r_goal_from_left > (base_d + r_start_from_right)
+            
+            [alpha1,alpha2, angle_moved_LR] = twoSlides_LR(start_pose,goal_pose,base_left,base_right,base_d,r_start_from_left,r_goal_from_right);
+            
+            plotArch (r_start_from_left,base_left,pi-alpha1(2),pi-alpha1(1));
+            hold on;
+            plotArch (r_goal_from_right,base_right,alpha2(2),alpha2(1));
+            hold on;
+        
+
+% can only to right then left
+        elseif r_goal_from_right > (base_d + r_start_from_left) && r_goal_from_left < (base_d + r_start_from_right)
+            
+            [alpha1,alpha2, angle_moved_RL] = twoSlides_RL(start_pose,goal_pose,base_left,base_right,base_d,r_start_from_right,r_goal_from_left);
+            
+            plotArch (r_goal_from_left,base_left,pi-alpha1(2),pi-alpha1(1));
+            hold on;
+            plotArch (r_start_from_right,base_right,alpha2(2),alpha2(1));
+            hold on;
+
+
+% can either way, find the best way
+        else
+            [alpha1_LR,alpha2_LR, angle_moved_LR] = twoSlides_LR(start_pose,goal_pose,base_left,base_right,base_d,r_start_from_left,r_goal_from_right);
+            [alpha1_RL,alpha2_RL, angle_moved_RL] = twoSlides_RL(start_pose,goal_pose,base_left,base_right,base_d,r_start_from_right,r_goal_from_left);
+
+            if angle_moved_LR <= angle_moved_RL
+                
+                alpha1 = alpha1_LR;
+                alpha2 = alpha2_LR;
+
+                plotArch (r_start_from_left,base_left,pi-alpha1(2),pi-alpha1(1));
+                hold on;
+                plotArch (r_goal_from_right,base_right,alpha2(2),alpha2(1));
+                hold on;
+
+            else
+                alpha1 = alpha1_RL;
+                alpha2 = alpha2_RL;
+
+                plotArch (r_goal_from_left,base_left,pi-alpha1(2),pi-alpha1(1));
+                hold on;
+                plotArch (r_start_from_right,base_right,alpha2(2),alpha2(1));
+                hold on;
+            end
+
+        end
     
-        r_goal = r_goal_from_right;
-    
-        alpha1_start = findalpha1(start_pose,base_left);
-        alpha2_end = findalpha2(goal_pose,base_right);
-    
-        alpha1_mid = pi - acos( (-r_goal^2 + r_start^2 + base_d^2) / (2*r_start*base_d) );
-        alpha2_mid = pi - acos((r_goal^2 + base_d^2 - r_start^2) / (2*base_d*r_goal));
-    
-        plotArch (r_start,base_left,pi-alpha1_start,pi-alpha1_mid);
-        hold on;
-        plotArch (r_goal,base_right,alpha2_end,alpha2_mid);
-        hold on;
-    
-    elseif r_goal_from_right > (base_d + r_start) && goal_pose(1) < 0
+ 
+
+% three slide ------------------
+
+    elseif r_goal_from_right >= (base_d + r_start_from_left)
         % if three slides AND rotate_start_pos is on the negative x-axis
         % choose this way of slide
     
-        disp("Three Slides")
-        disp("Control Mode: T,P")
-        disp("High Friction Sequence: L, R, L")
+        if goal_pose <= 0
+            disp("Three Slides")
+            disp("Control Mode: P,T")
+            disp("High Friction Sequence: L, R, L")
+        else
+            disp("Three Slides")
+            disp("Control Mode: T, P")
+            disp("High Friction Sequence: L, R, L")
+        end
     
         r_goal = r_goal_from_left;
-    
+
         %alpha1 = findShortRoute(r_start, r_goal, base_d, base_left,start_pose,goal_pose);
-    
-        a = 1; % need to know how to obtain the best a value
-        b = sqrt(r_start^2-a^2);
+        
+        % a = 1; % need to know how to obtain the best a value
+        % min
+        [a,~] = find_3_slide_SR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left);
+        % max
+        % [~,a] = find_3_slide_SR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left);
+        b = sqrt(r_start_from_left^2-a^2);
         r_mid = sqrt( (a+base_d)^2 + (b)^2 );
-    
+
         alpha1_start = findalpha1(start_pose,base_left);
         alpha1_end = findalpha1(goal_pose,base_left);
-    
-        alpha1_mid1 = pi - acos( (r_start^2 + base_d^2 - r_mid^2) / (2*r_start*base_d) );
-        alpha2_mid1 = pi - acos( (-r_start^2 + base_d^2 + r_mid^2) / (2*r_mid*base_d) );
-    
+
+        alpha1_mid1 = pi - acos( (r_start_from_left^2 + base_d^2 - r_mid^2) / (2*r_start_from_left*base_d) );
+        alpha2_mid1 = pi - acos( (-r_start_from_left^2 + base_d^2 + r_mid^2) / (2*r_mid*base_d) );
+
         alpha1_mid2 = pi - acos( (-r_mid^2 + base_d^2 + r_goal^2) / (2*r_goal*base_d) );
         alpha2_mid2 = pi - acos( (r_mid^2 + base_d^2 - r_goal^2) / (2*r_mid*base_d) );
-    
-        plotArch (r_start,base_left,pi-alpha1_start,pi-alpha1_mid1);
+
+        plotArch (r_start_from_left,base_left,pi-alpha1_start,pi-alpha1_mid1);
         hold on;
         plotArch (r_mid,base_right,alpha2_mid2,alpha2_mid1);
         hold on;
         plotArch (r_goal,base_left,pi-alpha1_end,pi-alpha1_mid2);
         hold on;
-    
+
     else 
-        disp("Error")
+        disp("Slide Error")
+        disp(r_goal_from_right)
+
     end
 end
 
+function [alpha1,alpha2, angle_moved] = twoSlides_LR(start_pose,goal_pose,base_left,base_right,base_d,r_start_from_left,r_goal_from_right)
+    r_goal = r_goal_from_right;
+    
+    alpha1_start = findalpha1(start_pose,base_left);
+    alpha2_end = findalpha2(goal_pose,base_right);
+
+    alpha1_mid = pi - acos( (-r_goal^2 + r_start_from_left^2 + base_d^2) / (2*r_start_from_left*base_d) );
+    alpha2_mid = pi - acos((r_goal^2 + base_d^2 - r_start_from_left^2) / (2*base_d*r_goal));
+
+    alpha1 = [alpha1_start,alpha1_mid];
+    alpha2 = [alpha2_mid,alpha2_end];
+    
+    % disp(alpha1)
+    % disp(alpha2)
+
+    angle_moved = abs(alpha1(1) - alpha1(2)) + abs(alpha2(1) - alpha2(2));
+    % disp(angle_moved)
+end
+
+function [alpha1,alpha2, angle_moved] = twoSlides_RL(start_pose,goal_pose,base_left,base_right,base_d,r_start_from_right,r_goal_from_left)
+    r_goal = r_goal_from_left;
+    
+    alpha2_start = findalpha2(start_pose,base_right);
+    alpha1_end = findalpha1(goal_pose,base_left);
+
+    alpha2_mid = pi - acos( (-r_goal^2 + r_start_from_right^2 + base_d^2) / (2*r_start_from_right*base_d) );
+    alpha1_mid = pi - acos((r_goal^2 + base_d^2 - r_start_from_right^2) / (2*base_d*r_goal));
+
+    alpha1 = [alpha1_mid,alpha1_end];
+    alpha2 = [alpha2_start,alpha2_mid];
+    
+    % disp("jkdbaskdkjasbdkjbk")
+    % disp(alpha1)
+    % disp(alpha2)
+
+    angle_moved = abs(alpha1(1) - alpha1(2)) + abs(alpha2(1) - alpha2(2));
+    % disp(angle_moved)
+end
+
+function [alpha1,alpha2,angle_moved] = threeSlides_LR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left, a)
+    r_goal = r_goal_from_left;
+    
+    %alpha1 = findShortRoute(r_start, r_goal, base_d, base_left,start_pose,goal_pose);
+
+    % a = 1; % need to know how to obtain the best a value
+    b = sqrt(r_start_from_left^2-a^2);
+    r_mid = sqrt( (a+base_d)^2 + (b)^2 );
+
+    alpha1_start = findalpha1(start_pose,base_left);
+    alpha1_end = findalpha1(goal_pose,base_left);
+
+    alpha1_mid1 = pi - acos( (r_start_from_left^2 + base_d^2 - r_mid^2) / (2*r_start_from_left*base_d) );
+    alpha2_mid1 = pi - acos( (-r_start_from_left^2 + base_d^2 + r_mid^2) / (2*r_mid*base_d) );
+
+    alpha1_mid2 = pi - acos( (-r_mid^2 + base_d^2 + r_goal^2) / (2*r_goal*base_d) );
+    alpha2_mid2 = pi - acos( (r_mid^2 + base_d^2 - r_goal^2) / (2*r_mid*base_d) );
+
+    alpha1 = [alpha1_start,alpha1_mid1,alpha1_mid2,alpha1_end];
+    alpha2 = [alpha2_mid1,alpha2_mid2];
+
+    angle_moved = abs(alpha1_start - alpha1_mid1) + abs(alpha2_mid2 - alpha2_mid1) + abs(alpha1_mid2 - alpha1_end);
+end
+
+function [a,a_max] = find_3_slide_SR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left)
+    i = 0;
+    angle_moved = [];
+    for a = -r_start_from_left:0.1:r_start_from_left
+        i = i+1;
+        [~, ~, angle_moved(i)] = threeSlides_LR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left, a);    
+    end
+    % figure
+    % plot(rad2deg(angle_moved)); 
+    [minValue, minIndex] = min(angle_moved);
+    disp(minValue)
+    [~, maxIndex] = max(angle_moved);
+    a = -r_start_from_left + (minIndex-1)*0.1;
+    a_max = -r_start_from_left + (maxIndex-1)*0.1;
+    % hold on;
+    % min(angle_moved)
+end
 
 function [isok] = checkLimit(alpha1, alpha2, alpha1_LIMIT, alpha2_LIMIT)
     if alpha1 > alpha1_LIMIT(1) || alpha2 > alpha2_LIMIT(1) || alpha1 < alpha1_LIMIT(2) || alpha2 < alpha2_LIMIT(2)
