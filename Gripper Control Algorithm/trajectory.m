@@ -18,16 +18,17 @@ clc
 %% User INPUT
 
 % start pose
-start_pose = [0, 2];
+start_angle = 0;
+start_pose = [0, 3];
 
 % goal pose, assume x = 0 all the time
-goal_angle = 0; 
+goal_angle = 180; 
 if goal_angle > 180 && goal_angle <= 360
     goal_angle = goal_angle - 360; % rotate anticlockwise
 elseif goal_angle > 360
     disp("Invalid angle input. Enter an angle that's within [-180, 360]")
 end
-goal_pose = [4, 7, deg2rad(goal_angle-45)]; % 先往左的3slide适合在左侧的goal pos
+goal_pose = [0, 7, deg2rad(goal_angle-45)]; % 先往左的3slide适合在左侧的goal pos
 % positive is clockwise
 % [0,90] -> [-45,45]负值由右往左转得到, 正值由左往右转得到
 % [0,-90] -> 由左往右 [270, 360]会按anticlockwise rotate来
@@ -82,27 +83,41 @@ if rotate_90 >= 1 && rotate_small > 0
 
     if goal_angle > 0 % Rotate from right to left
         disp("Rotate twice, clockwise")
-        plotStartPos(start_pose, L, W, base_left, base_right);
+        %plotStartPos(start_pose, L, W, base_left, base_right);
         disp("SSSRSSSR, Clockwise Rotation")
 
-        % rotate 90 degree
-        goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)]; % find the optimum location
 
-        [alpha1_rotate_1, alpha2_rotate_1, centre1,motor_angle_1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_1, d, W, L, base_left, base_right);
-        get_alpha_for_slide(centre1, start_pose, base_left, base_right, base_d, FL)
-        scatter(goal_pose_1(1), goal_pose_1(2), 100, 'filled');
-        hold on;
+        rotate1_start_pos = [start_pose(1:2),deg2rad(-90-45)]; % rotate 90 anticlockwise, from R2L
+        [alpha1_rotate1, alpha2_rotate1, centre1] = get_L2R_Rotate_StartPos(square_diagonal, rotate1_start_pos, d, W, L, base_left, base_right);
+        goal_pos = [goal_pose(1:2),deg2rad(goal_angle-90-45)]; % rotate 90 clockwise, from L2R
+        [alpha1_rotate2, alpha2_rotate2, centre2] = get_R2L_Rotate_StartPos(square_diagonal, goal_pos, d, W, L, base_left, base_right);
+        get_alpha_for_slide(centre2, centre1, base_left, base_right, base_d, FL)
+
+        % rotate 90 degree
+
+        % goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)]; % find the optimum location
+        % [alpha1_rotate_1, alpha2_rotate_1, centre1,motor_angle_1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_1, d, W, L, base_left, base_right);
+        % get_alpha_for_slide(centre1, start_pose, base_left, base_right, base_d, FL)
+        % scatter(goal_pose_1(1), goal_pose_1(2), 100, 'filled');
+        % hold on;
+
 
         % obtain second rotate start pos
-        goal_pose_2 = [goal_pose(1),goal_pose(2),goal_pose(3)-pi/2];
-        [alpha1_rotate_2, alpha2_rotate_2, centre2,motor_angle_2] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_2, d, W, L, base_left, base_right);
-        get_alpha_for_slide(centre2, goal_pose_1(1:2), base_left, base_right, base_d, FL)
+        % goal_pose_2 = [goal_pose(1),goal_pose(2),goal_pose(3)-pi/2];
+        % [alpha1_rotate_2, alpha2_rotate_2, centre2,motor_angle_2] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_2, d, W, L, base_left, base_right);
+        % get_alpha_for_slide(centre2, goal_pose_1(1:2), base_left, base_right, base_d, FL)
 
     elseif goal_angle < 0
         disp("Rotate twice, anticlockwise")
-        plotStartPos(start_pose, L, W, base_left, base_right);
+        %plotStartPos(start_pose, L, W, base_left, base_right);
         disp("SSSRSSSR, Clockwise Rotation")
         
+        rotate1_start_pos = [start_pose(1:2),deg2rad(90-45)]; % rotate 90 anticlockwise, from R2L
+        [alpha1_rotate1, alpha2_rotate1, centre1] = get_R2L_Rotate_StartPos(square_diagonal, rotate1_start_pos, d, W, L, base_left, base_right);
+        goal_pos = [goal_pose(1:2),deg2rad(goal_angle+90-45)]; % rotate 90 clockwise, from L2R
+        [alpha1_rotate2, alpha2_rotate2, centre2] = get_L2R_Rotate_StartPos(square_diagonal, goal_pos, d, W, L, base_left, base_right);
+        get_alpha_for_slide(centre2, centre1, base_left, base_right, base_d, FL)
+
         % rotate 90 degree
 
         % obtain second rotate start pos
@@ -145,27 +160,33 @@ else
         plotStartPos(start_pose, L, W, base_left, base_right);
         disp("SSSRSSSR, Clockwise Rotation")
 
-        goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)]; % find the optimum location
-        [alpha1_rotate_1, alpha2_rotate_1, centre1,motor_angle_1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_1, d, W, L, base_left, base_right);
-        get_alpha_for_slide(centre1, start_pose, base_left, base_right, base_d, FL)
-        scatter(goal_pose_1(1), goal_pose_1(2), 100, 'filled');
-        hold on;
-
-        % obtain second rotate start pos
-        goal_pose_2 = [goal_pose(1),goal_pose(2),deg2rad(90-45)];
-        [alpha1_rotate_2, alpha2_rotate_2, centre2,motor_angle_2] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_2, d, W, L, base_left, base_right);
-        get_alpha_for_slide(centre2, goal_pose_1(1:2), base_left, base_right, base_d, FL)
-
-
-        % get_angle_for_rotate_pos(motor_angle1);
-        % rotate_angle = pi/4 + (pi/4 - (pi/2 - motor_angle1(2)));
-        % rotate_1_pos = [centre1, rotate_angle];
-        % obtain second rotate start pos
+        rotate1_start_pos = [start_pose(1:2),deg2rad(-90-45)]; % rotate 90 clockwise, from R2L
+        [alpha1_rotate1, alpha2_rotate1, centre1] = get_L2R_Rotate_StartPos(square_diagonal, rotate1_start_pos, d, W, L, base_left, base_right);
+        rotate2_goal_pos = [goal_pose(1:2),deg2rad(90-45)]; % rotate 90 clockwise, from R2L
+        [alpha1_rotate2, alpha2_rotate2, centre2] = get_R2L_Rotate_StartPos(square_diagonal, rotate2_goal_pos, d, W, L, base_left, base_right);
+        get_alpha_for_slide(centre2, centre1, base_left, base_right, base_d, FL)
         
-    
- 
+        % optimum trajectory is the one that minimise the number of change
+        % of friction, then, minimise the length of trajectory
 
-        % goal_pose = [centre1, goal_pose(3)];
+        % complete single slide, obtain the angle before the first rotation
+        %arclength = 2;
+        %[alpha1,alpha2,pos_centre] = get_L2R_slide_onRight_EndPos(square_diagonal, arclength, start_pose, d, W, L, base_left,base_right);
+        %[alpha1_rotate, alpha2_rotate, centre1,motor_angle1] = get_R2L_Rotate_StartPos(square_diagonal, pos_centre, d, W, L, base_left, base_right);
+
+        % get the pos after 90 rotation
+
+
+        % goal_pose_1 = [goal_pose(1),goal_pose(2)*2/3,deg2rad(90-45)]; % find the optimum location
+        % [alpha1_rotate_1, alpha2_rotate_1, centre1,motor_angle_1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_1, d, W, L, base_left, base_right);
+        % get_alpha_for_slide(centre1, start_pose, base_left, base_right, base_d, FL)
+        % scatter(goal_pose_1(1), goal_pose_1(2), 100, 'filled');
+        % hold on;
+        % 
+        % % obtain second rotate start pos
+        % goal_pose_2 = [goal_pose(1),goal_pose(2),deg2rad(90-45)];
+        % [alpha1_rotate_2, alpha2_rotate_2, centre2,motor_angle_2] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose_2, d, W, L, base_left, base_right);
+        % get_alpha_for_slide(centre2, goal_pose_1(1:2), base_left, base_right, base_d, FL)
 
     else 
         disp("Error")
@@ -173,93 +194,6 @@ else
     end
 
 end 
-
-% if rotate_goal_pose(1) < 0 , PT
-
-% if rotate_goal_pose(2) > 0 , TP
-
-
-% %% start&end pos pre-process
-% r_start = sqrt((start_pose(1)-base_left(1))^2 + start_pose(2)^2);
-% r_goal_from_right = sqrt((goal_pose(1)-base_right(1))^2 + goal_pose(2)^2);
-% r_goal_from_left = sqrt((goal_pose(1)-base_left(1))^2 + goal_pose(2)^2);
-% 
-% 
-% 
-% %% movement identification - only for movements with start pose lower than goal pose
-% 
-% if r_goal_from_right > FL || r_goal_from_left > FL
-%     disp(r_goal_from_right)
-%     disp(r_goal_from_left)
-%     disp("Invalid Coordinate. Unreachable. Check.")
-% 
-% elseif goal_pose(1:2) == start_pose()
-%     disp("no movement")
-% 
-% elseif r_goal_from_left == r_start 
-%     disp("One Slide")
-%     disp("Control Mode: T,P")
-%     disp("High Friction Sequence: L")
-% 
-%     alpha1_start = findalpha1(start_pose,base_left);
-%     alpha1_end = findalpha1(goal_pose,base_left);
-% 
-%     plotArch (r_start,base_left,pi-alpha1_start,pi-alpha1_end);
-%     hold on;
-% 
-% elseif r_goal_from_right < (base_d + r_start)
-%     disp("Two Slides")
-%     disp("Control Mode: T,P")
-%     disp("High Friction Sequence: L, R")
-% 
-%     r_goal = r_goal_from_right;
-% 
-%     alpha1_start = findalpha1(start_pose,base_left);
-%     alpha2_end = findalpha2(goal_pose,base_right);
-% 
-%     alpha1_mid = pi - acos( (-r_goal^2 + r_start^2 + base_d^2) / (2*r_start*base_d) );
-%     alpha2_mid = pi - acos((r_goal^2 + base_d^2 - r_start^2) / (2*base_d*r_goal));
-% 
-%     plotArch (r_start,base_left,pi-alpha1_start,pi-alpha1_mid);
-%     hold on;
-%     plotArch (r_goal,base_right,alpha2_end,alpha2_mid);
-%     hold on;
-% 
-% elseif r_goal_from_right > (base_d + r_start) && goal_pose(1) < 0
-%     % if three slides AND rotate_start_pos is on the negative x-axis
-%     % choose this way of slide
-% 
-%     disp("Three Slides")
-%     disp("Control Mode: T,P")
-%     disp("High Friction Sequence: L, R, L")
-% 
-%     r_goal = r_goal_from_left;
-% 
-%     %alpha1 = findShortRoute(r_start, r_goal, base_d, base_left,start_pose,goal_pose);
-% 
-%     a = 1; % need to know how to obtain the best a value
-%     b = sqrt(r_start^2-a^2);
-%     r_mid = sqrt( (a+base_d)^2 + (b)^2 );
-% 
-%     alpha1_start = findalpha1(start_pose,base_left);
-%     alpha1_end = findalpha1(goal_pose,base_left);
-% 
-%     alpha1_mid1 = pi - acos( (r_start^2 + base_d^2 - r_mid^2) / (2*r_start*base_d) );
-%     alpha2_mid1 = pi - acos( (-r_start^2 + base_d^2 + r_mid^2) / (2*r_mid*base_d) );
-% 
-%     alpha1_mid2 = pi - acos( (-r_mid^2 + base_d^2 + r_goal^2) / (2*r_goal*base_d) );
-%     alpha2_mid2 = pi - acos( (r_mid^2 + base_d^2 - r_goal^2) / (2*r_mid*base_d) );
-% 
-%     plotArch (r_start,base_left,pi-alpha1_start,pi-alpha1_mid1);
-%     hold on;
-%     plotArch (r_mid,base_right,alpha2_mid2,alpha2_mid1);
-%     hold on;
-%     plotArch (r_goal,base_left,pi-alpha1_end,pi-alpha1_mid2);
-%     hold on;
-% 
-% else 
-%     disp("Error")
-% end
 
 
 
@@ -381,8 +315,7 @@ function [] = plotStartPos(start_pose, L, W, base_left, base_right)
 end
 
 
-%% rotate from positive x-axis to any other place that's on the left side of 
-% the finger
+%% rotate from positive x-axis to any other place that's on the left side of the finger
 function [alpha1_rotate, alpha2_rotate, centre1,motor_angle1] = get_R2L_Rotate_StartPos(square_diagonal, goal_pose, d, W, L, base_left, base_right)
     
     a_goal = [goal_pose(1)-square_diagonal/2*cos(goal_pose(3)) goal_pose(2)+square_diagonal/2*sin(goal_pose(3))];
@@ -490,8 +423,7 @@ function [alpha1_rotate, alpha2_rotate, centre1,motor_angle1] = get_R2L_Rotate_S
     hold on;
 end
 
-%% rotate from negative x-axis to any other place that's on the right side of 
-% the finger
+%% rotate from negative x-axis to any other place that's on the right side of the finger
 function [alpha1_rotate, alpha2_rotate, centre1] = get_L2R_Rotate_StartPos(square_diagonal, goal_pose, d, W, L, base_left, base_right)
     angle = -(goal_pose(3)+pi/4) - pi/4;
 
@@ -598,12 +530,92 @@ function [alpha1_rotate, alpha2_rotate, centre1] = get_L2R_Rotate_StartPos(squar
 
 end
 
+%% get the pos after slide that prepares block for the rotation from right to left
+% this one is wrong, the gap between two finger at the surface level is not L
+% start angle = 0
+function [alpha1_end,alpha2_end,centre_goal] = get_L2R_slide_onRight_EndPos(square_diagonal,arclength, start_pose, d, W, L, base_left, base_right)
+    % relationship between rotation end point with degree of rotation and
+    % start position
+    % need to set rotate_angle to 90 degree 
+    % with given r find the end pos of rotation
+    % rotate around the left motor
+    start_angle = 0;
 
+    % left
+    a_start = [start_pose(1)-square_diagonal/2*cos(start_angle) start_pose(2)+square_diagonal/2*sin(start_angle)];
+    a_length_start = sqrt((a_start(1)-base_left(1))^2 + a_start(2)^2);
+    alpha1_start = findalpha1(a_start,base_left);
+    alpha1_end = alpha1_start + arclength/a_length_start;
+    left_angle_offset = asin( (W/2) /a_length_start);
+    motor_angle_left = alpha1_end - left_angle_offset;
+    
+    % right
+    l1 = a_length_start*sin(pi-alpha1_end)/sin(motor_angle_left);
+    l2 = sqrt( (a_length_start)^2 + (d)^2 - (cos(pi-alpha1_end)*2*a_length_start*d) );
+    theta1 = asin(l1*sin(pi-motor_angle_left)/l2);
 
+    
+    x = (l2^2 - d^2 - a_length_start^2 + 2*a_length_start*d*cos(pi-alpha1_end)) / (2* ( cos(theta1)*l2 + a_length_start*cos(pi-alpha1_end) - d) ) ;
+    l3 = sqrt( (x)^2 + (l2)^2 - (cos(theta1)*2*x*l2) );
+    theta2 = asin(l1*sin(pi-motor_angle_left)/l3);
+    theta3 = asin(L*sin(pi/2)/l3);
+    motor_angle_right = pi - theta2 - theta3;
+    l4 = sqrt(l3^2-L^2);
+    b_length_goal = sqrt( (x)^2 + (l4+L)^2 - (cos(motor_angle_right)*2*x*(l4+L)) );
+    right_angle_offset = asin( (W/2) /b_length_goal);
+    alpha2_end = motor_angle_right + right_angle_offset;
 
+    % test
+    disp(l1)
 
+    
+    motor_angle = [motor_angle_left,motor_angle_right];
 
+    % get pos_centre
+    a1 = [base_left(1) - a_length_start*cos(alpha1_end), base_left(2) + a_length_start*sin(alpha1_end)];
+    b1 = [base_right(1) + b_length_goal*cos(alpha2_end), base_right(2) + b_length_goal*sin(alpha2_end)];
+    
+    % get square coord
+    square_coord = [a1;
+        a1(1)+L*cos(pi/2-motor_angle_right), a1(2)-L*sin(pi/2-motor_angle_right);
+        b1;
+        b1(1)-L*cos(pi/2-motor_angle_right), b1(2)+L*sin(pi/2-motor_angle_right);
+        a1;
+        b1;
+        ];
+    plot(square_coord(:,1), square_coord(:,2), 'b-', 'LineWidth', 0.5);
+    hold on;
 
+    % touch lines
+    Left_touch_line = [base_left; a1];
+    plot(Left_touch_line(:,1), Left_touch_line(:,2),'r', 'LineWidth', 0.5);
+    hold on;
+
+    Right_touch_line = [base_right; b1];
+    plot(Right_touch_line(:,1), Right_touch_line(:,2),'r', 'LineWidth', 0.5)
+    hold on;
+    
+    % get centre
+    [centre_goal, distance_to_base1, angle_to_base1] = getCentreInfor(square_coord(1:4,:), base_right, base_left);
+end
+
+%% get the pos after theta degree of rotation - this can be changed to adapt varying angle of rotation but not neccessary in this scenario
+% check a/sinA=b/sinB, 为什么两个不同形状确有一样的值
+% function [alpha1,alpha2] = get_Rotate_90_EndPos(alpha1,alpha2,W,L,base_left,base_right,a_length,b_length)
+%     % offset due to thickness of gripper
+%     left_angle_offset = asin( (W/2) /a_length);
+%     right_angle_offset = asin( (W/2) /b_length);
+% 
+%     % alpha1
+% 
+% 
+%     % alpha2
+%     motor_angle_right = asin(b_length*sin(right_angle_offset)/(W/2));
+%     alpha2 = motor_angle_right + right_angle_offset;
+% 
+%     % motor angle
+%     motor_angle = [motor_angle_left,motor_angle_right];
+% end
 
 %% Slide
 function [] = get_alpha_for_slide(goal_pose, start_pose, base_left, base_right, base_d, FL)
@@ -733,6 +745,7 @@ function [] = get_alpha_for_slide(goal_pose, start_pose, base_left, base_right, 
         % a = 1; % need to know how to obtain the best a value
         % min
         [a,~] = find_3_slide_SR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left);
+        figure
         % max
         % [~,a] = find_3_slide_SR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left);
         b = sqrt(r_start_from_left^2-a^2);
@@ -831,8 +844,9 @@ function [a,a_max] = find_3_slide_SR(start_pose,goal_pose,base_left,base_d,r_sta
         i = i+1;
         [~, ~, angle_moved(i)] = threeSlides_LR(start_pose,goal_pose,base_left,base_d,r_start_from_left,r_goal_from_left, a);    
     end
-    % figure
-    % plot(rad2deg(angle_moved)); 
+
+    figure
+    plot(rad2deg(angle_moved)); 
     [minValue, minIndex] = min(angle_moved);
     disp(minValue)
     [~, maxIndex] = max(angle_moved);
@@ -847,4 +861,13 @@ function [isok] = checkLimit(alpha1, alpha2, alpha1_LIMIT, alpha2_LIMIT)
         isok = 0;
     end   
     isok = 1;
+end
+
+
+
+%% Optimisation - gradient decent
+function [] = gradient_decent(theta)
+    while (abs(gradient)<= 1^(-5))
+        
+    end
 end
