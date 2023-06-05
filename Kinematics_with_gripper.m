@@ -7,8 +7,8 @@ robot.DataFormat = 'row';
 
 % Define the gripper link
 gripperLink = robotics.RigidBody('gripper_link');
-row_gripperLink = collisionCylinder(0.1,0.2); % cylinder: radius,length
-row_gripperLink.Pose = trvec2tform([0 0 0.2/2]);
+row_gripperLink = collisionCylinder(0.05,0.15); % cylinder: radius,length
+row_gripperLink.Pose = trvec2tform([0 0 0.15/2]);
 addCollision(gripperLink,row_gripperLink);
 
 % Define the gripper Joint
@@ -17,12 +17,16 @@ gripperJoint.setFixedTransform(eye(4));
 gripperLink.Joint = gripperJoint;
 
 % Add the gripper link to the robot
-robot.addBody(gripperLink, 'tool0');
+robot.addBody(gripperLink, 'flange');
 
+show(robot,"Collisions","on","Frames","off");
+drawnow;
+%%
 % Create an interactive robot representation
-roboti = interactiveRigidBodyTree(robot);
-ax = gca;
-
+figure("Name","Interactive GUI")
+roboti = interactiveRigidBodyTree(robot,"MarkerScaleFactor",0.25);
+%ax = gca;
+%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 desiredPosition = [0.1 0.4 0.1];
