@@ -1,7 +1,9 @@
 # IHM_Robotics_Consultancy_Project
 
-VF gripper V2: simulates the gripper with base within the simscape
+VF gripper V2: simulates the gripper with a base within the simscape
 
-Gripper Control Algorithm: Basic control of the gripper, realise rotation between -90 to 90 degree. Working on realising rotations between 90 to 180 degree.
+Gripper Trajectory Algorithm: Basic gripper control, realise rotation between -180 to 180 degrees. 
 
-Smooth Motion Function: Plots the the motion of consecutive straight-line trajectories in 3D, with samples in time.
+Gripper Control: Developed a control algorithm that successfully removed the error throughout the process.
+
+Smooth Motion Function: Plots the motion of consecutive straight-line trajectories in 3D, with samples in time.
