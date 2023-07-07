@@ -27,9 +27,7 @@ To implement such a task, the team decided to integrate three components: The gr
 
 After all three components functioned correctly individually, they were integrated in a way like seen in Figure (*PROVIDE LINK FOR PICTURE*).
 
-More specifically, different platforms were used to control each section of the project. The gripper is controlled using MATLAB, the arm is controlled using python, and computer vision processing is done in C++. The high-level code which combines all three is written in python, allowing each section to communicate using ROS topics. An example of this inter-platform communication is displayed in Fgure (*PROVIDE LINK FOR PICTURE*).\\
-
-###Gripper Control
+### Gripper Control
 Explaining how gripper control works
 This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. Now the algorithm is being tested on the following shapes: square cube, hexagon prism, octagon prism. 
 
@@ -45,8 +43,11 @@ Another problem was the change in the thickness of the finger when changing the 
 
 
 
-###Computer Vision Processing
+### Computer Vision Processing
 Explaining how computer vision works
+
+### UR5e control, integration and close loop control
+The UR5e is controlled via Moveit with python. With MoveIt, you can define the robot's kinematic structure, specify the environment (including objects and obstacles), and plan collision-free paths for the robot's end effector. Four functions is built to allow the arm to move to start position, pick up position, manipulate position, and place position. Pick up position is the object coordinates on the board and original orientation all set by the users. After picking up, the MATLAB machine will send command to move UR5e to manipulation pose. Then the arm control code will request coordinates and orientation detected by the camera and send it to the MATLAB side to set as start position for In-Hand-Manipulation(IHM). After IHM, UR5e will recieve command and request computer vision feedback to check final pose of the object and calculate the error between the goal pose and the actual pose. The UR5e control code will add bias/offset to the place pose (including orientation error) to close the loop. 
 
 ## Prerequisites
 
@@ -65,7 +66,6 @@ Explaining how computer vision works
     source /opt/ros/noetic(your version)/setup.bash
     cd ~/catkin_wd（your workspace folder)
     source devel/setup.bash
-    
 ```
 - For Simulation only
 ```
