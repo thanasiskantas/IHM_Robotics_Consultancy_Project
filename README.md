@@ -49,17 +49,17 @@ Explaining how computer vision works
 
 ## Prerequisites
 
-- Linux machine with ROS, Moveit, Rviz and Universal Robot driver (https://github.com/UniversalRobots/Universal_Robots_ROS_Driver). Moveit uses python interface to build simulation environment, get end effector poses and plan/execute trajectory while Rviz allows the user to view the planned path via simulation. 
-- For usage that requires remote control for the UR5E: MATLAB with ROS Toolbox
+- Linux machine with ROS, Moveit, Rviz and Universal Robot driver (https://github.com/UniversalRobots/Universal_Robots_ROS_Driver). Moveit uses the python interface to build simulation environment, get end effector poses and plan/execute trajectory while Rviz allows the user to view the planned path via simulation. 
+- For usage that requires remote control of the UR5E: MATLAB with ROS Toolbox
 - Realsense driver... opencv_contrib version??
 
 ## How to use
 
 ### UR5e
--  Start the UR5e and open External control program
+-  Start the UR5e and open the External control program.
 
 ### ROS in linux machine
-- Enter the ROS workspace where you installed the driver in
+- Enter the ROS workspace where you installed the driver.
 ```
     source /opt/ros/noetic(your version)/setup.bash
     cd ~/catkin_wd（your workspace folder)
@@ -71,7 +71,7 @@ Explaining how computer vision works
   roslaunch ur5e_moveit_config demo.launch
 ```
 - For real robot:
-  1. Start ROS core and connect to the UR5e, run the code on seperate terminal. If the connection is successful, you can see the simulation robot has the same pose as the real one. 
+  1. Start ROS core and connect to the UR5e, run the code on seperate terminal. If the connection is successful, you will see the simulation robot has the same pose as the real one. 
     ```
       roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.0.100
     ```
@@ -82,10 +82,10 @@ Explaining how computer vision works
       roslaunch ur5e_moveit_config moveit_rviz.launch rviz_config:=$(rospack find ur5e_moveit_config)/launch/moveit.rviz
     ```
 
-  2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, that means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
+  2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, this means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
 
 ### Vision and remote control:
-Remote control is achieved via ROS topic and Moveit python interface. Remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sending commands to the ROS node. The ROS machine will create a ROS subscriber in python and listen to the command and execute the command with Moveit interface. Vision feedback is achieved in the same way but the publisher for vision is running on the ROS machine via python.
+Remote control is achieved via ROS topic and Moveit python interface. A remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sends commands to the ROS node. The ROS machine will create a ROS subscriber in python, listen to the commands and execute them with Moveit interface. Vision feedback is achieved in the same way but the publisher for vision is running on the ROS machine via python.
   - Run ```Computer_Vision.py``` to start corner detection and publishing the coordinates
   - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and ready to recieve and execute control commands and CV feedback.
 
@@ -100,7 +100,7 @@ The primary ethical concern is ensuring the safety of humans that come into cont
 
 The introduction of robotic systems, including gripper technology, has the potential to automate certain tasks traditionally performed by humans. This can lead to job displacement, as some roles may no longer require human labour. The variable friction gripper is compact and able to perform manipulation of objects in confined spaces, unlike more traditional methods. This may lead to the replacement of workers previously used to do these tasks, for example, item pickers in a warehouse.
 
-The gripper is equipped with a realsense camera which is used only to determine the location of the object being manipulated. No data from the camera is stored and so there are no privacy concerns.
+The gripper is equipped with a realsense camera which is used to determine the location of the object being manipulated. This technology, while designed for a specific use case, can have broader applications and implications. It's essential to consider privacy concerns when deploying any vision-based system, as they may unintentionally capture sensitive information.
 
 
 ## Sustainability
