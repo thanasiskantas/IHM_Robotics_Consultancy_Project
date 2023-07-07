@@ -55,16 +55,19 @@ $$R2L_{left motor} = π - cos^{-1}(\frac{d_L^2 + (W/2)^2 - (d/2)^2}{d_L * (W/2)}
 
 To compensate for the small angle in the undesired rotation prep-pose, an extra angle calculation is introduced, effectively removing the introduced error. Furthermore, a control strategy is designed to extend the limited rotation range of the gripper, allowing rotations from -180 to 180.
 
-### Sliding
-
-Regarding sliding, an important observation is that any two points within the gripper moving range could be reached with three circular arcs. Therefore, for sliding movements, a mathematical model consisting of three linked arcs is introduced, allowing the gripper to select the combination with the shortest arc length using gradient descent, thereby minimizing the error introduced by friction switches. The motor angles required for sliding movements are provided in the equations.
+![Rotation Mathematical Model](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_2.png)
 
 ### Control Strategy
 Another problem was the change in the thickness of the finger when changing the level of friction. This was solved by introducing a transitional layer is introduced between adjacent moves to ensure smooth transitions and precise open-loop control. Additionally, closed-loop control is implemented, incorporating a vision subsystem that provides real-time localization and feedback coordinates. More information regarding the vision subsystem can be found in the dedicated section of the report. 
 
+![Control Strategy](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_3.png)
 
-###Arm Control and Integration
-Explaining how Arm Control and Integration works
+### Sliding
+
+Regarding sliding, an important observation is that any two points within the gripper moving range could be reached with three circular arcs. Therefore, for sliding movements, a mathematical model consisting of three linked arcs is introduced, allowing the gripper to select the combination with the shortest arc length using gradient descent, thereby minimizing the error introduced by friction switches. The motor angles required for sliding movements are provided in the equations.
+
+![Sliding Mathematical Model](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_1.png)
+
 
 
 ## Materials
