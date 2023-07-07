@@ -29,7 +29,6 @@ After all three components functioned correctly individually, they were integrat
 
 More specifically, different platforms were used to control each section of the project. The gripper is controlled using MATLAB, the arm is controlled using python, and computer vision processing is done in C++. The high-level code which combines all three is written in python, allowing each section to communicate using ROS topics. An example of this inter-platform communication is displayed in Fgure (*PROVIDE LINK FOR PICTURE*).\\
 
-
 ###Gripper Control
 Explaining how gripper control works
 This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. Now the algorithm is being tested on the following shapes: square cube, hexagon prism, octagon prism. 
@@ -49,10 +48,47 @@ Another problem was the change in the thickness of the finger when changing the 
 ###Computer Vision Processing
 Explaining how computer vision works
 
+## Prerequisites
 
-###Arm Control and Integration
-Explaining how Arm Control and Integration works
+- Linux machine with ROS, Moveit, Rviz and Universal Robot driver (https://github.com/UniversalRobots/Universal_Robots_ROS_Driver). Moveit uses python interface to build simulation environment, get end effector poses and plan/execute trajectory while Rviz allows the user to view the planned path via simulation. 
+- For usage that requires remote control for the UR5E: MATLAB with ROS Toolbox
+- Realsense driver... opencv_contrib version??
 
+## How to use
+
+### UR5e
+-  Start the UR5e and open External control program
+
+### ROS in linux machine
+- Enter the ROS workspace where you installed the driver in
+```
+    source /opt/ros/noetic(your version)/setup.bash
+    cd ~/catkin_wd（your workspace folder)
+    source devel/setup.bash
+    
+```
+- For Simulation only
+```
+  roslaunch ur5e_moveit_config demo.launch
+```
+- For real robot:
+  1. Start ROS core and connect to the UR5e, run the code on seperate terminal. If the connection is successful, you can see the simulation robot has the same pose as the real one. 
+    ```
+      roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.0.100
+    ```
+    ```
+      roslaunch ur5e_moveit_config moveit_planning_execution.launch
+    ```
+    ```
+      roslaunch ur5e_moveit_config moveit_rviz.launch rviz_config:=$(rospack find ur5e_moveit_config)/launch/moveit.rviz
+    ```
+
+  2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, that means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
+
+### Vision and remote control:
+Remote control is achieved via ROS topic and Moveit python interface. Remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sending commands to the ROS node. The ROS machine will create a ROS subscriber in python and listen to the command and execute the command with Moveit interface. Vision feedback is achieved in the same way but the publisher for vision is running on the ROS machine via python.
+  - Run ```Computer_Vision.py``` to start corner detection and publishing the coordinates
+  - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and ready to recieve and execute control commands and CV feedback.
 
 ## Materials
 
