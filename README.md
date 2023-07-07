@@ -1,6 +1,7 @@
 # In Hand Manipulation (IHM) Project at Imperial College London
 
-By Athanasios Kantas, Qiyang Yan, Sean Xiao, Nick Zheng, Alexandria Perkin
+By Athanasios Kantas, Qiyang Yan, Sean Xiao, Nick Zheng, Alexandria Perkin  
+Supervisor: Dr Ad Spiers
 
 ## Table of Contents
 
@@ -17,7 +18,7 @@ By Athanasios Kantas, Qiyang Yan, Sean Xiao, Nick Zheng, Alexandria Perkin
 
 ## Introduction
 
-The problem that the team was tasked to approach was that of In-Hand Manipulation (IHM). Rotation and of objects using the traditional approach of Pick-Twist-Place is very spatially inefficient. This problem is solved by the use of IHM grippers that allow for sliding and rotating with minimal arm movement. The way the team decided to showcase IHM using these grippers, was by doing a Pick-IHM-Place task using simple toy blocks.
+Welcome to the repository for the 3rd-year consultancy project conducted in collaboration with the Imperial College London Manipulation and Touch Lab. The objective of this project was to use a robot arm and a novel variable friction gripper, to perform a toy assembly task with In Hand Manipulation. This project serves as a proof of concept for a potential production line application. This documentation will provide you with a comprehensive understanding of the project and its components, enabling you to take over its development.
 
 ## Implementation
 
@@ -90,6 +91,7 @@ Run the [findhsvvalue.py](https://github.com/thanasiskantas/IHM_Robotics_Consult
 
 
 ## Gripper Control
+
 This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. Now the algorithm is being tested on the following shapes: square cube, hexagon prism, octagon prism. 
 
 [trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) generates the trajectory consists sliding and rotation based on the start pose and end pose entered by the user, you could simulate the generated trajectory using this file. The rotation within the trajectory only shows the start and end pose of the rotation without trajectory in-between being shown, the sliding trajectory of the center of the object is shown with black arcs.
@@ -123,6 +125,54 @@ Another problem was the change in the thickness of the finger when changing the 
 Additionally, closed-loop control is implemented, incorporating a vision subsystem that provides real-time localization and feedback coordinates. More information regarding the vision subsystem can be found in the dedicated section of the report. 
 
 ![Control Strategy](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_3.png)
+
+### Computer Vision Processing
+Explaining how computer vision works
+
+### UR5e control, integration and close loop control
+The UR5e is controlled via Moveit with python. With MoveIt, you can define the robot's kinematic structure, specify the environment (including objects and obstacles), and plan collision-free paths for the robot's end effector. Four functions is built to allow the arm to move to start position, pick up position, manipulate position, and place position. Pick up position is the object coordinates on the board and original orientation all set by the users. After picking up, the MATLAB machine will send command to move UR5e to manipulation pose. Then the arm control code will request coordinates and orientation detected by the camera and send it to the MATLAB side to set as start position for In-Hand-Manipulation(IHM). After IHM, UR5e will recieve command and request computer vision feedback to check final pose of the object and calculate the error between the goal pose and the actual pose. The UR5e control code will add bias/offset to the place pose (including orientation error) to close the loop. 
+
+## Prerequisites
+
+- Linux machine with ROS, Moveit, Rviz and Universal Robot driver (https://github.com/UniversalRobots/Universal_Robots_ROS_Driver). Moveit uses python interface to build simulation environment, get end effector poses and plan/execute trajectory while Rviz allows the user to view the planned path via simulation. 
+- For usage that requires remote control for the UR5E: MATLAB with ROS Toolbox
+- Realsense driver... opencv_contrib version??
+
+## How to use
+
+### UR5e
+-  Start the UR5e and open External control program
+
+### ROS in linux machine
+- Enter the ROS workspace where you installed the driver in
+```
+    source /opt/ros/noetic(your version)/setup.bash
+    cd ~/catkin_wd（your workspace folder)
+    source devel/setup.bash
+```
+- For Simulation only
+```
+  roslaunch ur5e_moveit_config demo.launch
+```
+- For real robot:
+  1. Start ROS core and connect to the UR5e, run the code on seperate terminal. If the connection is successful, you can see the simulation robot has the same pose as the real one. 
+    ```
+      roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.0.100
+    ```
+    ```
+      roslaunch ur5e_moveit_config moveit_planning_execution.launch
+    ```
+    ```
+      roslaunch ur5e_moveit_config moveit_rviz.launch rviz_config:=$(rospack find ur5e_moveit_config)/launch/moveit.rviz
+    ```
+
+  2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, that means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
+
+### Vision and remote control:
+ <img src="Interface Diagram.png" alt="Alt text" title="Communication Interface">
+Remote control is achieved via ROS topic and Moveit python interface. Remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sending commands to the ROS node. The ROS machine will create a ROS subscriber in python and listen to the command and execute the command with Moveit interface. Vision feedback is achieved in the same way but the publisher for vision is running on the ROS machine via python.
+  - Run ```Computer_Vision.py``` to start corner detection and publishing the coordinates
+  - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and ready to recieve and execute control commands and CV feedback. You will see the environment for obstacle detection is added to the Rviz simulation. <img src="simulation.png" alt="Alt text" title="Rviz simulation with obstacle and wall">
 
 
 ## Materials
