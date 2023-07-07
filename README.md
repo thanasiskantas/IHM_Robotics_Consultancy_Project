@@ -86,7 +86,7 @@ Run the [findhsvvalue.py](https://github.com/thanasiskantas/IHM_Robotics_Consult
 
 This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. The algorithm has been tested on the following shapes: square cube, hexagon prism, octagon prism. 
 
-[trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) generates the trajectory consists sliding and rotation based on the start pose and end pose entered by the user, you could simulate the generated trajectory using this file. The rotation within the trajectory only shows the start and end pose of the rotation without trajectory in-between being shown, the sliding trajectory of the center of the object is shown with black arcs.
+[trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) generates the trajectory consisting of sliding and rotation based on the start pose and end pose entered by the user. Using this file you can simulate the generated trajectory. For rotations within the trajectory, only the start and end pose of the rotations are shown, without trajectory in-between. The sliding trajectory of the center of the object is shown with black arcs.
 
 ### Simulation
 
@@ -94,7 +94,7 @@ In addition, the folder [Gripper Simulation](https://github.com/thanasiskantas/I
 
 ### Sliding
 
-Regarding sliding, an important observation is that any two points within the gripper moving range could be reached with three circular arcs. Therefore, for sliding movements, a mathematical model consisting of three linked arcs is introduced, allowing the gripper to select the combination with the shortest arc length using gradient descent, thereby minimizing the error introduced by friction switches. The motor angles required for sliding movements are provided in the equations.
+Regarding sliding, an important observation is that any two points within the gripper moving range can be reached with three circular arcs. Therefore, for sliding movements, a mathematical model consisting of three linked arcs is introduced, allowing the gripper to select the combination with the shortest arc length using gradient descent, thereby minimizing the error introduced by friction switches. The motor angles required for sliding movements are provided in the equations.
 
 ![Sliding Mathematical Model](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_1.png)
 
@@ -110,7 +110,7 @@ To compensate for the small angle in the undesired rotation prep-pose, an extra 
 ![Rotation Mathematical Model](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_2.png)
 
 ### Control Strategy
-Another problem was the change in the thickness of the finger when changing the level of friction. This was solved by introducing a transitional layer between adjacent moves to ensure smooth transitions and precise open-loop control. The corresponding function that will be used in the integration could be found here [getTrajectory_improved.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/IHM%20Integrated%20Control/getTrajectory_improved.m) 
+Another problem was the change in the thickness of the finger when changing the level of friction. This was solved by introducing a transitional layer between adjacent moves to ensure smooth transitions and precise open-loop control. The corresponding functionused in integration can be found here [getTrajectory_improved.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/IHM%20Integrated%20Control/getTrajectory_improved.m) 
 
 Additionally, closed-loop control is implemented, incorporating a vision subsystem that provides real-time localization and feedback coordinates. More information regarding the vision subsystem can be found in the dedicated section of the report. 
 
@@ -120,7 +120,7 @@ Additionally, closed-loop control is implemented, incorporating a vision subsyst
 Explaining how computer vision works
 
 ### UR5e control, integration and close loop control
-The UR5e is controlled via Moveit with python. With MoveIt, you can define the robot's kinematic structure, specify the environment (including objects and obstacles), and plan collision-free paths for the robot's end effector. Four functions is built to allow the arm to move to start position, pick up position, manipulate position, and place position. Pick up position is the object coordinates on the board and original orientation all set by the users. After picking up, the MATLAB machine will send command to move UR5e to manipulation pose. Then the arm control code will request coordinates and orientation detected by the camera and send it to the MATLAB side to set as start position for In-Hand-Manipulation(IHM). After IHM, UR5e will recieve command and request computer vision feedback to check final pose of the object and calculate the error between the goal pose and the actual pose. The UR5e control code will add bias/offset to the place pose (including orientation error) to close the loop. 
+The UR5e is controlled via Moveit with python. With MoveIt, you can define the robot's kinematic structure, specify the environment (including objects and obstacles), and plan collision-free paths for the robot's end effector. There are four functions to allow the arm to move to start position, pick up position, manipulate position, and place position. Pick up position is the object's coordinates on the board and original orientation that is set by the user. After picking up, the MATLAB machine will send a command to move UR5e to manipulation pose. Then the arm control code will request coordinates and the orientation detected by the camera and send it to the MATLAB side, to set as the start position for In-Hand-Manipulation(IHM). After IHM, UR5e will receive a command and request computer vision feedback to check the final pose of the object and calculate the error between the goal pose and the actual pose. The UR5e control code will add bias/offset to the place pose (including orientation error) to close the loop. 
 
 ## Prerequisites
 
@@ -156,13 +156,13 @@ The UR5e is controlled via Moveit with python. With MoveIt, you can define the r
       roslaunch ur5e_moveit_config moveit_rviz.launch rviz_config:=$(rospack find ur5e_moveit_config)/launch/moveit.rviz
     ```
 
-  2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, that means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
+  2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, this means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
 
 ### Vision and remote control:
  <img src="Interface Diagram.png" alt="Alt text" title="Communication Interface">
-Remote control is achieved via ROS topic and Moveit python interface. Remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sending commands to the ROS node. The ROS machine will create a ROS subscriber in python and listen to the command and execute the command with Moveit interface. Vision feedback is achieved in the same way but the publisher for vision is running on the ROS machine via python.
+Remote control is achieved via ROS topic and the Moveit python interface. A remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sends commands to the ROS node. The ROS machine will create a ROS subscriber in python, listen to the commands and execute the commands with the Moveit interface. Vision feedback is achieved in the same way, but the publisher for vision is running on the ROS machine via python.
   - Run ```Computer_Vision.py``` to start corner detection and publishing the coordinates
-  - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and ready to recieve and execute control commands and CV feedback. You will see the environment for obstacle detection is added to the Rviz simulation. <img src="simulation.png" alt="Alt text" title="Rviz simulation with obstacle and wall">
+  - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and prepare to recieve and execute control commands and CV feedback. You will see the environment for obstacle detection is added to the Rviz simulation. <img src="simulation.png" alt="Alt text" title="Rviz simulation with obstacle and wall">
 
 
 ## Materials
@@ -185,11 +185,3 @@ Dycem loses its stickiness over time however washing it and removing any debris 
 
 The variable friction gripper reduces the movement of the robot arm when performing manipulation, minimizing energy consumption, which translates to reduced environmental impact.
 
-## Installation
-
-Provide step-by-step instructions on how to install your project. Include any dependencies or prerequisites that need to be set up.
-
-```shell
-$ git clone https://github.com/your-username/your-repo.git
-$ cd your-repo
-$ npm install
