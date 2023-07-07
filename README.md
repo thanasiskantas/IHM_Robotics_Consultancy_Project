@@ -116,8 +116,6 @@ Additionally, closed-loop control is implemented, incorporating a vision subsyst
 
 ![Control Strategy](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/control_diagram_3.png)
 
-### Computer Vision Processing
-Explaining how computer vision works
 
 ### UR5e control, integration and close loop control
 The UR5e is controlled via Moveit with python. With MoveIt, you can define the robot's kinematic structure, specify the environment (including objects and obstacles), and plan collision-free paths for the robot's end effector. There are four functions to allow the arm to move to start position, pick up position, manipulate position, and place position. Pick up position is the object's coordinates on the board and original orientation that is set by the user. After picking up, the MATLAB machine will send a command to move UR5e to manipulation pose. Then the arm control code will request coordinates and the orientation detected by the camera and send it to the MATLAB side, to set as the start position for In-Hand-Manipulation(IHM). After IHM, UR5e will receive a command and request computer vision feedback to check the final pose of the object and calculate the error between the goal pose and the actual pose. The UR5e control code will add bias/offset to the place pose (including orientation error) to close the loop. 
