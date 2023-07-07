@@ -42,7 +42,7 @@ This algorithm is designed to utilise the finger to realise the in-hand manipula
 
 ### Simulation
 
-In addition, the file ____ produces a simulation process carried out using Simulink to observe the motion of objects within the gripper. A spatial contact force block is introduced to simulate various friction forces. This simulation aided in understanding the behaviour of the system and allowed for the identification of preferred rotation start poses. 
+In addition, the file **Gripper Simulation** produces a simulation process carried out using Simulink to observe the motion of objects within the gripper. A spatial contact force block is introduced to simulate various friction forces. This simulation aided in understanding the behaviour of the system and allowed for the identification of preferred rotation start poses. 
 
 ### Rotation
 
