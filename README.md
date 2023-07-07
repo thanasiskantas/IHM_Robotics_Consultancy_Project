@@ -18,16 +18,7 @@ Supervisor: Dr Ad Spiers
 
 ## Introduction
 
-Welcome to the repository for the 3rd-year consultancy project conducted in collaboration with the Imperial College London Manipulation and Touch Lab. The objective of this project was to use a robot arm and a novel variable friction gripper, to perform a toy assembly task with In Hand Manipulation. This project serves as a proof of concept for a potential production line application. This documentation will provide you with a comprehensive understanding of the project and its components, enabling you to take over its development.
-
-## Implementation
-
-To implement such a task, the team decided to integrate three components: The gripper, the arm, and computer vision. The gripper is responsible for the IHM, the arm is responsible for the pick-place task, and the computer vision works with both to achieve error detection and correction.
-
-After all three components functioned correctly individually, they were integrated in a way like seen in Figure (*PROVIDE LINK FOR PICTURE*).
-
-More specifically, different platforms were used to control each section of the project. The gripper is controlled using MATLAB, the arm is controlled using python, and computer vision processing is done in C++. The high-level code which combines all three is written in Python, allowing each section to communicate using ROS topics. An example of this inter-platform communication is displayed in Figure (*PROVIDE LINK FOR PICTURE*).\\
-
+Welcome to the repository for the 3rd-year consultancy project conducted in collaboration with the Imperial College London Manipulation and Touch Lab (https://www.imperial.ac.uk/manipulation-touch/). The objective of this project was to use a robot arm and a novel variable friction gripper, to perform a toy assembly task with In Hand Manipulation. This project serves as a proof of concept for a potential production line application. This documentation will provide you with a comprehensive understanding of the project and its components, enabling you to take over its development.
 
 ## Computer Vision
 
@@ -52,6 +43,7 @@ This part aims to develop a vision system to accurately detect and track an obje
    
 2. The second approach used HSV colour space thresholding. This technique allows object identification without changing the object's characteristics. However, the HSV threshold values must be calibrated to accommodate different lighting conditions.
 
+3. The final design is based on HSV colour space thresholding. This approach fits the goal we set in the project and it is more generalisable.
 #### Detailed Implementation 
 
 ##### Image processing
@@ -92,15 +84,13 @@ Run the [findhsvvalue.py](https://github.com/thanasiskantas/IHM_Robotics_Consult
 
 ## Gripper Control
 
-This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. Now the algorithm is being tested on the following shapes: square cube, hexagon prism, octagon prism. 
+This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. The algorithm has been tested on the following shapes: square cube, hexagon prism, octagon prism. 
 
 [trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) generates the trajectory consists sliding and rotation based on the start pose and end pose entered by the user, you could simulate the generated trajectory using this file. The rotation within the trajectory only shows the start and end pose of the rotation without trajectory in-between being shown, the sliding trajectory of the center of the object is shown with black arcs.
 
 ### Simulation
 
 In addition, the folder [Gripper Simulation](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/tree/bfcf90439357cf4e225c7dbe434d14aee228815c/Gripper%20Simulation) produces a simulation process carried out using Simulink to observe the motion of objects within the gripper. A spatial contact force block is introduced to simulate various friction forces. This simulation aided in understanding the behavior of the system and allowed for the identification of preferred rotation start poses. 
-
-With the help of simulation, six types of statuses within the gripper are observed for the cube with four of them being preferred rotate start pose. However, at the later stage of testing, the friction status of two fingers doesn’t show any impact on the pose of the cube, the pose is found to be purely dependent on the clockwise or anticlockwise rotation of the fingers. For example, during the slide, if the object moves from the left side to the right side with fingers rotated clockwise, regardless of the friction pad, the object ends at the pose shown in Figure 1.
 
 ### Sliding
 
