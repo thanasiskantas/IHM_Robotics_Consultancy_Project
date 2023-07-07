@@ -17,7 +17,7 @@ By Athanasios Kantas, Qiyang Yan, Sean Xiao, Nick Zheng, Alexandria Perkin
 
 ## Introduction
 
-The problem that the team was tasked to approach was that of In-Hand Manipulation (IHM). Rotation and of objects using the traditional approach of Pick-Twist-Place is very spatially inefficient. This problem is solved by the use of IHM grippers that allow for sliding and rotating with minimal arm movement. The way the team decided to showcase IHM using these grippers, was by doing a Pick-IHM-Place task using simple toy blocks.
+Welcome to the repository for the 3rd-year consultancy project conducted in collaboration with the Imperial College London Manipulation and Touch Lab. The objective of this project was to use a robot arm and a novel variable friction gripper, to perform a toy assembly task with In Hand Manipulation. This project serves as a proof of concept for a potential production line application. This documentation will provide you with a comprehensive understanding of the project and its components, enabling you to take over its development.
 
 
 ## Implementation
