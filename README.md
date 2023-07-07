@@ -19,7 +19,14 @@ By Athanasios Kantas, Qiyang Yan, Sean Xiao, Nick Zheng, Alexandria Perkin
 
 The problem that the team was tasked to approach was that of In-Hand Manipulation (IHM). Rotation and of objects using the traditional approach of Pick-Twist-Place is very spatially inefficient. This problem is solved by the use of IHM grippers that allow for sliding and rotating with minimal arm movement. The way the team decided to showcase IHM using these grippers, was by doing a Pick-IHM-Place task using simple toy blocks.
 
+## Computer Vision
 
+### Computer Vision part 1
+- nick
+- qiyang
+```
+ahsdhasidoashdas
+```
 ## Implementation
 
 To implement such a task, the team decided to integrate three components: The gripper, the arm, and computer vision. The gripper is responsible for the IHM, the arm is responsible for the pick-place task, and the computer vision works with both to achieve error detection and correction.
