@@ -86,9 +86,10 @@ The UR5e is controlled via Moveit with python. With MoveIt, you can define the r
   2. Start the program on the UR5e and you will see 'connected to reverse interface' on the first terminal running roscore, that means you can now control the robot with Moveit. You can interact with the end effector on Rviz window and press ```plan and execute``` to move the robot.
 
 ### Vision and remote control:
+ <img src="Interface Diagram.png" alt="Alt text" title="Communication Interface">
 Remote control is achieved via ROS topic and Moveit python interface. Remote machine can run MATLAB with ROS toolbox to connect to the ROS machine. By running the MATLAB functions a ROS topic publisher is created as “control command” and sending commands to the ROS node. The ROS machine will create a ROS subscriber in python and listen to the command and execute the command with Moveit interface. Vision feedback is achieved in the same way but the publisher for vision is running on the ROS machine via python.
   - Run ```Computer_Vision.py``` to start corner detection and publishing the coordinates
-  - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and ready to recieve and execute control commands and CV feedback.
+  - Run ```Arm_control.py``` to set the simulation environment for trajectory planning, move the gripper to starting position and ready to recieve and execute control commands and CV feedback. You will see the environment for obstacle detection is added to the Rviz simulation. <img src="simulation.png" alt="Alt text" title="Rviz simulation with obstacle and wall">
 
 ## Materials
 
