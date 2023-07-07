@@ -51,14 +51,14 @@ This part aims to develop a vision system to accurately detect and track an obje
    
 2. The second approach used HSV colour space thresholding. This technique allows object identification without changing the object's characteristics. However, the HSV threshold values must be calibrated to accommodate different lighting conditions.
 
-#### Deatiled Implementation 
+#### Detailed Implementation 
 
 ##### Image processing
 
 ![Vision hardware setup](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Vision/hsvflowchart.PNG)
 
 
-Images are processed using Gaussian blur filtering before thresholding to reduce high-frequency noise. Post thresholding, morphological operations and median blur filters are applied to further reduce noise and smooth the image's edges.
+Images are processed using Gaussian blur filtering before thresholding to reduce high-frequency noise. Post thresholding, morphological operations, and median blur filters are applied to further reduce noise and smooth the image's edges.
 
 ##### Coordinates calculation
 
@@ -83,18 +83,20 @@ opencv-python
 
 #### Camera Calibration
 
-Clone the project from https://github.com/niconielsen32/CameraCalibration.git and prepare the images containing the chessboard taken by the camera intended to use in the project. Collect the camera's intrinsic and distortion coefficients and adjust these values in the get_camera_coordinates function in the finalvision_hsv.py file.
+Clone the project from https://github.com/niconielsen32/CameraCalibration.git and prepare the images containing the chessboard taken by the camera intended to use in the project. Collect the camera's intrinsic and distortion coefficients and adjust these values in the get_camera_coordinates function in the [finalvision_hsv.py](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/Vision/finalvision_hsv.py).
 
 #### HSV Value
-Run the findhsvvalue.py file and drag the track bar to find a range of HSV values that can isolate the desired colour block. 
+Run the [findhsvvalue.py](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/Vision/findhsvvalue.py) and drag the track bar to find a range of HSV values in  [finalvision_hsv.py](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/00b76ba407fd9bcee9a7d44300f1b258b95658ad/Vision/finalvision_hsv.py) that can isolate the desired colour block. 
 
 
 ## Gripper Control
 This algorithm is designed to utilise the finger to realise the in-hand manipulation for various sizes of objects, including sliding and rotation, with the goal of minimising the error. Now the algorithm is being tested on the following shapes: square cube, hexagon prism, octagon prism. 
 
+[trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) generates the trajectory consists sliding and rotation based on the start pose and end pose entered by the user, you could simulate the generated trajectory using this file. The rotation within the trajectory only shows the start and end pose of the rotation without trajectory in-between being shown, the sliding trajectory of the center of the object is shown with black arcs.
+
 ### Simulation
 
-In addition, the folder [Gripper Simulation](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/tree/bfcf90439357cf4e225c7dbe434d14aee228815c/Gripper%20Simulation) produces a simulation process carried out using Simulink to observe the motion of objects within the gripper. A spatial contact force block is introduced to simulate various friction forces. This simulation aided in understanding the behaviour of the system and allowed for the identification of preferred rotation start poses. 
+In addition, the folder [Gripper Simulation](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/tree/bfcf90439357cf4e225c7dbe434d14aee228815c/Gripper%20Simulation) produces a simulation process carried out using Simulink to observe the motion of objects within the gripper. A spatial contact force block is introduced to simulate various friction forces. This simulation aided in understanding the behavior of the system and allowed for the identification of preferred rotation start poses. 
 
 With the help of simulation, six types of statuses within the gripper are observed for the cube with four of them being preferred rotate start pose. However, at the later stage of testing, the friction status of two fingers doesn’t show any impact on the pose of the cube, the pose is found to be purely dependent on the clockwise or anticlockwise rotation of the fingers. For example, during the slide, if the object moves from the left side to the right side with fingers rotated clockwise, regardless of the friction pad, the object ends at the pose shown in Figure 1.
 
@@ -107,7 +109,7 @@ Regarding sliding, an important observation is that any two points within the gr
 
 ### Rotation
 
-A mathematical model for rotation is then presented, providing equations for clockwise and anticlockwise rotations. [trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) will generate the trajectory based on the start pose and end pose entered by the user, you could simulate the generated trajectory using this file.
+A mathematical model for rotation is then presented, providing equations for clockwise and anticlockwise rotations. 
 
 $$R2L_{left motor} = π - cos^{-1}(\frac{d_L^2 + (W/2)^2 - (d/2)^2}{d_L * (W/2)}) - cos^{-1}(\frac{l_1^2 + 2 * L^2 - d_R^2}{4 * l_1 * L^2}) - cos^{-1}(\frac{d_L^2 + l_1^2 - d^2}{2 * d_L * l_1}) - θ_L $$
 
