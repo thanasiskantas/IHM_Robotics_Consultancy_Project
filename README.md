@@ -44,11 +44,14 @@ This algorithm is designed to utilise the finger to realise the in-hand manipula
 
 In addition, the folder [Gripper Simulation](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/tree/bfcf90439357cf4e225c7dbe434d14aee228815c/Gripper%20Simulation) produces a simulation process carried out using Simulink to observe the motion of objects within the gripper. A spatial contact force block is introduced to simulate various friction forces. This simulation aided in understanding the behaviour of the system and allowed for the identification of preferred rotation start poses. 
 
-### Rotation
-
 With the help of simulation, six types of statuses within the gripper are observed for the cube with four of them being preferred rotate start pose. However, at the later stage of testing, the friction status of two fingers doesn’t show any impact on the pose of the cube, the pose is found to be purely dependent on the clockwise or anticlockwise rotation of the fingers. For example, during the slide, if the object moves from the left side to the right side with fingers rotated clockwise, regardless of the friction pad, the object ends at the pose shown in Figure 1.
 
+
+### Rotation
+
 A mathematical model for rotation is then presented, providing equations for clockwise and anticlockwise rotations.
+
+$$R2L_{left motor} = π - cos^{-1}(\frac{d_L^2 + (W/2)^2 - (d/2)^2}{d_L * (W/2)}) - cos^{-1}(\frac{l_1^2 + 2 * L^2 - d_R^2}{4 * l_1 * L^2}) - cos^{-1}(\frac{d_L^2 + l_1^2 - d^2}{2 * d_L * l_1}) - θ_L $$
 
 To compensate for the small angle in the undesired rotation prep-pose, an extra angle calculation is introduced, effectively removing the introduced error. Furthermore, a control strategy is designed to extend the limited rotation range of the gripper, allowing rotations from -180 to 180.
 
