@@ -21,12 +21,68 @@ The problem that the team was tasked to approach was that of In-Hand Manipulatio
 
 ## Computer Vision
 
-### Computer Vision part 1
-- nick
-- qiyang
-```
-ahsdhasidoashdas
-```
+This part aims to develop a vision system to accurately detect and track an object's coordinates using a depth camera. The goal is to obtain the object's coordinates in the gripper's coordinate frame, which can then be used in a gripper control algorithm. The vision system uses an Intel RealSense D435i depth camera mounted on an adjustable base with an adjustable angle to capture the entire field of view of the gripper. The system processes images and applies algorithms to identify and track the object of interest.
+
+
+### Hardware 
+
+![Vision hardware setup](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Vision/cameraandthemount.png)
+
+#### Hardware design history 
+
+1. The initial un-adjustable base design didn't allow the RGB camera to be centered due to its left-sided placement on the camera.
+2. The un-adjustable angle didn't include the whole gripper in the image, regardless of its position.
+3. The final design incorporates an adjustable base and angle. This design allows the camera to capture the entire field of view of the gripper, keeping the gripper centered at the start position.
+
+### Software 
+
+#### Software design history
+
+1. The initial approach used an ArUco marker for object detection, which proved to be accurate and robust. However, this method required different markers for different objects, which is not desirable for shape sorting.
+   
+2. The second approach used HSV colour space thresholding. This technique allows object identification without changing the object's characteristics. However, the HSV threshold values must be calibrated to accommodate different lighting conditions.
+
+#### Deatiled Implementation 
+
+##### Image processing
+
+![Vision hardware setup](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Vision/hsvflowchart.PNG)
+
+
+Images are processed using Gaussian blur filtering before thresholding to reduce high-frequency noise. Post thresholding, morphological operations and median blur filters are applied to further reduce noise and smooth the image's edges.
+
+##### Coordinates calculation
+
+
+![Vision hardware setup](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Vision/solvepnp.jpg)
+
+OpenCV's contour detection function identifies the contours in the image. A bounding box is drawn around the largest contour, taken as the object of interest. The center of the object is calculated as the geometric center of the bounding box. The SolvePnP functions from OpenCV are used to get the coordinates of the object in 3D relative to the camera coordinate frame. The theory is shown in the figure above. The transformation matrix, measured in the CAD file, transforms the coordinates from the camera frame to the gripper frame. Specifically, the transformation is 0 on the x-axis, -28.35 on the y-axis, and 78.77 on the z-axis, with a rotation of 122.56 degrees anticlockwise around the x-axis. These values are project-specific and depend on the camera mount design.
+
+### Performance and Recommendations
+
+The system, using a camera with FPS30 and 1280X720 resolution, updates the object's center coordinates in each frame, providing real-time tracking. The system performs optimally in well-lit environments with uniquely colored objects. However, changes in lighting conditions can affect HSV values, necessitating occasional calibration. 
+
+
+
+### Usage
+
+#### Package Installation
+ Before using the project, install the necessary Python packages: 
+ pyrealsense2 (if using Intel RealSense camera);
+ numpy;
+opencv-python
+
+#### Camera Calibration
+
+Clone the project from https://github.com/niconielsen32/CameraCalibration.git and prepare the images containing the chessboard taken by the camera intended to use in the project. Collect the camera's intrinsic and distortion coefficients and adjust these values in the get_camera_coordinates function in the finalvision_hsv.py file.
+
+#### HSV Value
+Run the findhsvvalue.py file and drag the track bar to find a range of HSV values that can isolate the desired colour block. 
+
+
+
+
+
 ## Implementation
 
 To implement such a task, the team decided to integrate three components: The gripper, the arm, and computer vision. The gripper is responsible for the IHM, the arm is responsible for the pick-place task, and the computer vision works with both to achieve error detection and correction.
