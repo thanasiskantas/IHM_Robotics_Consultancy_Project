@@ -1,6 +1,7 @@
 # In Hand Manipulation (IHM) Project at Imperial College London
 
 By Athanasios Kantas, Qiyang Yan, Sean Xiao, Nick Zheng, Alexandria Perkin
+Supervisor: Dr Ad Spiers
 
 ## Table of Contents
 
