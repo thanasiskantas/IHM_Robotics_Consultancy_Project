@@ -89,7 +89,7 @@ To implement such a task, the team decided to integrate three components: The gr
 
 After all three components functioned correctly individually, they were integrated in a way like seen in Figure (*PROVIDE LINK FOR PICTURE*).
 
-More specifically, different platforms were used to control each section of the project. The gripper is controlled using MATLAB, the arm is controlled using python, and computer vision processing is done in C++. The high-level code which combines all three is written in python, allowing each section to communicate using ROS topics. An example of this inter-platform communication is displayed in Fgure (*PROVIDE LINK FOR PICTURE*).\\
+More specifically, different platforms were used to control each section of the project. The gripper is controlled using MATLAB, the arm is controlled using python, and computer vision processing is done in C++. The high-level code which combines all three is written in Python, allowing each section to communicate using ROS topics. An example of this inter-platform communication is displayed in Figure (*PROVIDE LINK FOR PICTURE*).\\
 
 
 ## Gripper Control
@@ -105,7 +105,7 @@ With the help of simulation, six types of statuses within the gripper are observ
 
 ### Rotation
 
-A mathematical model for rotation is then presented, providing equations for clockwise and anticlockwise rotations.
+A mathematical model for rotation is then presented, providing equations for clockwise and anticlockwise rotations. [trajectory_final.m](https://github.com/thanasiskantas/IHM_Robotics_Consultancy_Project/blob/d2c591755910f07e84d46e6dd812f25e6b57b41a/Gripper%20Trajectory%20Generation/trajectory_final.m) will generate the trajectory based on the start pose and end pose entered by the user, you could simulate the generated trajectory using this file.
 
 $$R2L_{left motor} = π - cos^{-1}(\frac{d_L^2 + (W/2)^2 - (d/2)^2}{d_L * (W/2)}) - cos^{-1}(\frac{l_1^2 + 2 * L^2 - d_R^2}{4 * l_1 * L^2}) - cos^{-1}(\frac{d_L^2 + l_1^2 - d^2}{2 * d_L * l_1}) - θ_L $$
 
