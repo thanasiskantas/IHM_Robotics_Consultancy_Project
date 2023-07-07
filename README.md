@@ -7,7 +7,7 @@ Supervisor: Dr Ad Spiers
 
 - [Introduction](#introduction)
 - [Implementation](#Implementation)
-- [Materials](#Materials)
+- [Gripper Control](#Gripper_Control)
 - [Ethical Consequences](#Ethical_Consequences)
 - [Sustainability](#Sustainability)
 - [Installation](#installation)
